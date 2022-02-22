@@ -3,7 +3,9 @@
 Graphene has complete support for Relay and offers some utils to make integration from Python easy.
 *Nodes
 
-           A Node is an Interface provided by graphene.relay that contains a single field id (which is a ID!). Any object that inherits from it has to implement a get_node method for retrieving a Node by an id.<br><br>
+           A Node is an Interface provided by graphene.relay that contains a single field id (which is a ID!).
+           Any object that inherits from it has to implement a get_node method for retrieving a Node by an id.<br><br>
+
             1) example :
                         class Ship(graphene.ObjectType):
                         '''A ship in the Star Wars saga'''
@@ -21,7 +23,8 @@ Graphene has complete support for Relay and offers some utils to make integratio
             2) Custom Nodes
 
                         You can use the predefined relay.Node or you can subclass it, defining custom ways of
-                        how a node id is encoded (using the to_global_id method in the class) or how we can retrieve a Node given a encoded id (with the get_node_from_global_id method).
+                        how a node id is encoded (using the to_global_id method in the class) or how we can retrieve a Node
+                        given a encoded id (with the get_node_from_global_id method).
 
                         example:  """"
                                         class CustomNode(Node):
@@ -50,14 +53,19 @@ Graphene has complete support for Relay and offers some utils to make integratio
 
             3) Accessing node types
 
-                            If we want to retrieve node instances from a global_id (scalar that identifies an instance by it’s type name and id), we can simply do Node.get_node_from_global_id(info, global_id).
+                            If we want to retrieve node instances from a global_id (scalar that identifies an instance
+                            by it’s type name and id), we can simply do Node.get_node_from_global_id(info, global_id).
 
-                            In the case we want to restrict the instance retrieval to a specific type, we can do: Node.get_node_from_global_id(info, global_id, only_type=Ship). This will raise an error if the global_id doesn’t correspond to a Ship type.
+                            In the case we want to restrict the instance retrieval to a specific type, we can do:
+                            Node.get_node_from_global_id(info, global_id, only_type=Ship). This will raise an error
+                            if the global_id doesn’t correspond to a Ship type.
 
             4) Node Root field
 
-                            As is required in the Relay specification, the server must implement a root field called node that returns a Node Interface.
-                            For this reason, graphene provides the field relay.Node.Field, which links to any type in the Schema which implements Node. Example usage:
+                            As is required in the Relay specification, the server must implement a root
+                            field called node that returns a Node Interface.
+                            For this reason, graphene provides the field relay.Node.Field, which links to any type
+                            in the Schema which implements Node. Example usage:
 
                                         """"
                                             class Query(graphene.ObjectType):
@@ -68,12 +76,14 @@ Graphene has complete support for Relay and offers some utils to make integratio
 
 * Connections
 
-            A connection is a vitaminized version of a List that provides ways of slicing and paginating through it. The way you create Connection types in graphene is using relay.Connection and relay.ConnectionField.
+            A connection is a vitaminized version of a List that provides ways of slicing and paginating through it.
+            The way you create Connection types in graphene is using relay.Connection and relay.ConnectionField.
 
             1) Quick example
 
                             If we want to create a custom Connection on a given node, we have to subclass the Connection class.
-                            In the following example, extra will be an extra field in the connection, and other an extra field in the Connection Edge.
+                            In the following example, extra will be an extra field in the connection,
+                            and other an extra field in the Connection Edge.
 
                                         """"
                                             class ShipConnection(Connection):
@@ -86,11 +96,14 @@ Graphene has complete support for Relay and offers some utils to make integratio
                                                     other = String()
                                         """"
 
-                            The ShipConnection connection class, will have automatically a pageInfo field, and a edges field (which is a list of ShipConnection.Edge). This Edge will have a node field linking to the specified node (in ShipConnection.Meta) and the field other that we defined in the class.
+                            The ShipConnection connection class, will have automatically a pageInfo field,
+                            and a edges field (which is a list of ShipConnection.Edge). This Edge will have a node field
+                            linking to the specified node (in ShipConnection.Meta) and the field other that we defined in the class.
 
             2) Connection Field
 
-                            You can create connection fields in any Connection, in case any ObjectType that implements Node will have a default Connection.
+                            You can create connection fields in any Connection, in case any ObjectType that
+                            implements Node will have a default Connection.
 
                             """"
                                 class Faction(graphene.ObjectType):
@@ -106,7 +119,8 @@ Graphene has complete support for Relay and offers some utils to make integratio
 
             Most APIs don’t just allow you to read data, they also allow you to write.
 
-            In GraphQL, this is done using mutations. Just like queries, Relay puts some additional requirements on mutations, but Graphene nicely manages that for you. All you need to do is make your mutation a subclass of relay.ClientIDMutation.
+            In GraphQL, this is done using mutations. Just like queries, Relay puts some additional requirements on
+            mutations, but Graphene nicely manages that for you. All you need to do is make your mutation a subclass of relay.ClientIDMutation.
 
                         """"
                             class IntroduceShip(relay.ClientIDMutation):
@@ -156,7 +170,9 @@ Graphene has complete support for Relay and offers some utils to make integratio
 1) create project, app, models, register and migrate
 3) pip install django-filter ( bcoz we are using this library in our schema)
 2) write schema
-        ( Note that the above Query class is marked as ‘abstract’. This is because we will now create a project-level query which will combine all our app-level queries.)
+        ( Note that the above Query class is marked as ‘abstract’. This is because we will now create a
+        project-level query which will combine all our app-level queries.)
+
 3) create a parent project-level schema.py and  write in it
 4) update settings
         add 'graphene_django' in settings

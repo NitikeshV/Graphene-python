@@ -6,7 +6,8 @@ Graphene-Django ships with a special DjangoObjectType that automatically transfo
 
 * Specifying which fields to include
 
-                By default, DjangoObjectType will present all fields on a Model through GraphQL. If you only want a subset of fields to be present, you can do so using fields or exclude.
+                By default, DjangoObjectType will present all fields on a Model through GraphQL.
+                If you only want a subset of fields to be present, you can do so using fields or exclude.
 
              1) fields
 
