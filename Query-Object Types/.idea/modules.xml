@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Query and Object Types/.idea/Query and Object Types.iml" filepath="$PROJECT_DIR$/../Query and Object Types/.idea/Query and Object Types.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Query-Object Types.iml" filepath="$PROJECT_DIR$/.idea/Query-Object Types.iml" />
+    </modules>
+  </component>
+</project>

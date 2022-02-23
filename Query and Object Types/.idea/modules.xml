@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Query and Object Types.iml" filepath="$PROJECT_DIR$/.idea/Query and Object Types.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Query-Object Types/.idea/Query-Object Types.iml" filepath="$PROJECT_DIR$/../Query-Object Types/.idea/Query-Object Types.iml" />
     </modules>
   </component>
 </project>
