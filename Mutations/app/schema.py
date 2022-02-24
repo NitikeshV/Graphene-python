@@ -1,8 +1,12 @@
 import graphene
 from graphene_django import DjangoObjectType
 from graphene_django import DjangoListField
-from .models import Category,Pet
+from .models import Category,Pet,Product
 from .forms import MyForm,PetForm
+from .serializers import ProductSerializer
+from graphene_django.rest_framework.mutation import SerializerMutation
+from graphene import relay
+from graphql_relay import from_global_id
 
 from graphene_django.forms.mutation import DjangoFormMutation, DjangoModelFormMutation
 
@@ -38,14 +42,11 @@ class CategoryMutationUpdate(graphene.Mutation):
     category = graphene.Field(CategoryType)
 
     @classmethod
-    def mutate(cls, root,info,topic):
-        category = Category(topic=topic)
+    def mutate(cls, root,info,topic,id):
+        category = Category.objects.get(id=id)
+        category.topic = topic
         category.save()                             # saving new category
-        return CategoryMutationAdd(category=category)
-
-
-
-
+        return CategoryMutationUpdate(category=category)
 
 
 
@@ -66,8 +67,49 @@ class MyMutation(DjangoFormMutation):
         form_class = MyForm
 
 
+""" Django REST Framework """
+class MyProductMutation(SerializerMutation):
+    class Meta:
+        serializer_class = ProductSerializer
+        model_operations = ['create', 'update']
+        lookup_field = 'id'
 
 
+""" Django REST Framework - Overriding Update Queries """
+class MyProductMutationOverriding(SerializerMutation):
+    class Meta:
+        serializer_class = ProductSerializer
+
+    @classmethod
+    def get_serializer_kwargs(cls, root, info, **input):
+        if 'id' in input:
+            instance = Product.objects.filter(
+                id=input['id'],
+            ).first()
+            if instance:
+                return {'instance': instance, 'data': input, 'partial': True}
+
+            else:
+                raise http.Http404
+
+        return {'data': input, 'partial': True}
+
+
+""" Relay (similar to add new category class) """
+
+class CategoryRelay(relay.ClientIDMutation):
+    class Input:
+        topic = graphene.String(required=True)
+        id = graphene.ID()
+
+    category = graphene.Field(CategoryType)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root,info,topic,id):
+        category = Category.objects.get(pk=from_global_id(id)[1])
+        category.topic=topic
+        category.save()
+        return CategoryMutationAdd(category=category)
 
 
 """ Query """
@@ -84,6 +126,9 @@ class Mutation(graphene.ObjectType):
     update_category = CategoryMutationUpdate.Field()
     django_form_mutation_PetForm = PetMutation.Field()
     django_form_mutation_MyForm = MyMutation.Field()
+    my_product_mutation = MyProductMutation.Field()
+    my_product_mutation_overriding = MyProductMutationOverriding.Field()
+    relay_category = CategoryRelay.Field()
 
 
 
