@@ -100,21 +100,37 @@ class MyProductMutationOverriding(SerializerMutation):
 class CategoryRelay(relay.ClientIDMutation):
     class Input:
         topic = graphene.String(required=True)
-        id = graphene.ID()
+        id = graphene.String()
 
     category = graphene.Field(CategoryType)
 
     @classmethod
     def mutate_and_get_payload(cls, root,info,topic,id):
+        try:
+            print("*"*50)
+            print(id)
+       
+            print(from_global_id(id))
+            category = Category.objects.get(pk=from_global_id(id)[1])
+        except Exception as e:
+            print("Exception:- ",e)
+
         category = Category.objects.get(pk=from_global_id(id)[1])
         category.topic=topic
         category.save()
         return CategoryMutationAdd(category=category)
+   
+
+class CategoryNode(DjangoObjectType):
+    class Meta:
+        model = Category
+        interfaces = (relay.Node, )
 
 
 """ Query """
 class Query(graphene.ObjectType):
-    all_categories = DjangoListField(CategoryType)
+    #all_categories = DjangoListField(CategoryType)
+    all_categories = DjangoListField(CategoryNode)
 
     def resolve_all_categories(root,info):
         return Category.objects.all()
